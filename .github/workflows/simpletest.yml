@@ -2,8 +2,8 @@
 name: Simple Test
 
 on:
-  [push]
-  # workflow_dispatch: # Activate this workflow manually
+  push:
+    branches: -wip # workflow_dispatch: # Activate this workflow manually
 #   push:
 #     # branches:
 #     #   - wip
