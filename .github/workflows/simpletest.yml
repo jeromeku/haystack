@@ -3,6 +3,8 @@ name: Simple Test
 
 on:
   push:
+    branches:
+      - wip
 
 #   push:
 #     # branches:

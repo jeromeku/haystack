@@ -1,0 +1,17 @@
+name: Reusable Workflow Demo
+run-name: This workflow demonstrates how to create a reusable workflow that can be used in other workflows.
+on: [workflow_call]
+jobs:
+  info:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Show repo info
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: |
+          echo Repo is ${{github.repository}}
+          echo Event name is ${{github.event_name}}
+          echo Event path is ${{github.event_path}}
+          echo Context dump: 
+          echo $GITHUB_CONTEXT
