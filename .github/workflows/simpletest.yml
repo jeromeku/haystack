@@ -3,7 +3,7 @@ name: Simple Test
 
 on:
   push:
-    branches: -wip # workflow_dispatch: # Activate this workflow manually
+
 #   push:
 #     # branches:
 #     #   - wip
@@ -58,54 +58,54 @@ jobs:
             exit 1
           fi
 
-  # unit-tests:
-  #   name: Unit / ${{ matrix.topic }} / ${{ matrix.os }} / ${{ matrix.dependencies }}
-  #   needs: black
-  #   strategy:
-  #     fail-fast: false
-  #     matrix:
-  #       os:
-  #         - ubuntu-latest
-  #       topic:
-  #         - document_stores
-  #         - nodes
-  #         - agents
-  #         - cli
-  #         - preview
-  #         - prompt
-  #         - pipelines
-  #         - utils
-  #         - others
-  #         - modeling
-  #       dependencies:
-  #         - all,dev
-  #       include:
-  #         - topic: document_stores
-  #           os: ubuntu-latest
-  #           dependencies: elasticsearch8,faiss,weaviate,pinecone,opensearch,inference,audio,crawler,preprocessing,file-conversion,pdf,ocr,ray,onnx,beir,metrics,aws,dev
-  #   runs-on: ${{ matrix.os }}
-  #   steps:
-  #     - uses: actions/checkout@v3
+  unit-tests:
+    name: Unit / ${{ matrix.topic }} / ${{ matrix.os }} / ${{ matrix.dependencies }}
+    needs: black
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+        topic:
+          - document_stores
+          - nodes
+          - agents
+          - cli
+          - preview
+          - prompt
+          - pipelines
+          - utils
+          - others
+          - modeling
+        dependencies:
+          - all,dev
+        include:
+          - topic: document_stores
+            os: ubuntu-latest
+            dependencies: elasticsearch8,faiss,weaviate,pinecone,opensearch,inference,audio,crawler,preprocessing,file-conversion,pdf,ocr,ray,onnx,beir,metrics,aws,dev
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v3
 
-  #     - uses: actions/setup-python@v4
-  #       with:
-  #         python-version: ${{ env.PYTHON_VERSION }}
+      - uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
 
-  #     - name: Install Haystack
-  #       run: pip install .[${{ matrix.dependencies }}]
+      - name: Install Haystack
+        run: pip install .[${{ matrix.dependencies }}]
 
-  #     - name: Run
-  #       run: pytest --cov-report xml:coverage.xml --cov="haystack" -m "unit" test/${{ matrix.topic }}
+      - name: Run
+        run: pytest --cov-report xml:coverage.xml --cov="haystack" -m "unit" test/${{ matrix.topic }}
 
-  #     - name: Coveralls Parallel
-  #       # We upload only coverage for ubuntu as handling both os
-  #       # complicates the workflow too much for little to no gain
-  #       if: matrix.os == 'ubuntu-latest'
-  #       uses: coverallsapp/github-action@v2
-  #       with:
-  #         path-to-lcov: coverage.xml
-  #         flag-name: ${{ matrix.topic }}
-  #         parallel: true
+      - name: Coveralls Parallel
+        # We upload only coverage for ubuntu as handling both os
+        # complicates the workflow too much for little to no gain
+        if: matrix.os == 'ubuntu-latest'
+        uses: coverallsapp/github-action@v2
+        with:
+          path-to-lcov: coverage.xml
+          flag-name: ${{ matrix.topic }}
+          parallel: true
 
   # upload-coverage:
   #   needs: unit-tests
